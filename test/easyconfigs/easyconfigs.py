@@ -182,7 +182,7 @@ class EasyConfigTest(TestCase):
         if dep == 'binutils' and len(dep_vars) > 1:
             empty_vsuff_vars = [v for v in dep_vars.keys() if v.endswith('versionsuffix: ')]
             if len(empty_vsuff_vars) == 1:
-                dep_vars = dict((k, v) for (k, v) in dep_vars.items() if k != empty_vsuff_vars[0])
+                dep_vars = {k: v for (k, v) in dep_vars.items() if k != empty_vsuff_vars[0]}
 
         # multiple variants of HTSlib is OK as long as they are deps for a matching version of BCFtools;
         # same goes for WRF and WPS
@@ -208,26 +208,26 @@ class EasyConfigTest(TestCase):
         if dep in ['FFTW', 'imkl']:
             serial_vsuff_vars = [v for v in dep_vars.keys() if v.endswith('versionsuffix: -serial')]
             if len(serial_vsuff_vars) == 1:
-                dep_vars = dict((k, v) for (k, v) in dep_vars.items() if k != serial_vsuff_vars[0])
+                dep_vars = {k: v for (k, v) in dep_vars.items() if k != serial_vsuff_vars[0]}
 
         # filter out BLIS and libFLAME with -amd versionsuffix
         # (AMD forks, used in gobff/*-amd toolchains)
         if dep in ['BLIS', 'libFLAME']:
             amd_vsuff_vars = [v for v in dep_vars.keys() if v.endswith('versionsuffix: -amd')]
             if len(amd_vsuff_vars) == 1:
-                dep_vars = dict((k, v) for (k, v) in dep_vars.items() if k != amd_vsuff_vars[0])
+                dep_vars = {k: v for (k, v) in dep_vars.items() if k != amd_vsuff_vars[0]}
 
         # filter out ScaLAPACK with -BLIS-* versionsuffix, used in goblf toolchain
         if dep == 'ScaLAPACK':
             blis_vsuff_vars = [v for v in dep_vars.keys() if '; versionsuffix: -BLIS-' in v]
             if len(blis_vsuff_vars) == 1:
-                dep_vars = dict((k, v) for (k, v) in dep_vars.items() if k != blis_vsuff_vars[0])
+                dep_vars = {k: v for (k, v) in dep_vars.items() if k != blis_vsuff_vars[0]}
 
         # filter out ScaLAPACK with -bf versionsuffix, used in gobff toolchain
         if dep == 'ScaLAPACK':
             bf_vsuff_vars = [v for v in dep_vars.keys() if '; versionsuffix: -bf' in v]
             if len(bf_vsuff_vars) == 1:
-                dep_vars = dict((k, v) for (k, v) in dep_vars.items() if k != bf_vsuff_vars[0])
+                dep_vars = {k: v for (k, v) in dep_vars.items() if k != bf_vsuff_vars[0]}
 
         # for some dependencies, we allow exceptions for software that depends on a particular version,
         # as long as that's indicated by the versionsuffix
@@ -317,7 +317,7 @@ class EasyConfigTest(TestCase):
         if dep == 'ELSI' and len(dep_vars) > 1:
             pexsi_vsuff_vars = [v for v in dep_vars.keys() if v.endswith('versionsuffix: -PEXSI')]
             if len(pexsi_vsuff_vars) == 1:
-                dep_vars = dict((k, v) for (k, v) in dep_vars.items() if k != pexsi_vsuff_vars[0])
+                dep_vars = {k: v for (k, v) in dep_vars.items() if k != pexsi_vsuff_vars[0]}
 
         # only single variant is always OK
         if len(dep_vars) == 1:
@@ -470,7 +470,7 @@ class EasyConfigTest(TestCase):
         if EasyConfigTest.ordered_specs is None:
             self.process_all_easyconfigs()
 
-        ecs_by_full_mod_name = dict((ec['full_mod_name'], ec) for ec in EasyConfigTest.parsed_easyconfigs)
+        ecs_by_full_mod_name = {ec['full_mod_name']: ec for ec in EasyConfigTest.parsed_easyconfigs}
         if len(ecs_by_full_mod_name) != len(EasyConfigTest.parsed_easyconfigs):
             self.fail('Easyconfigs with duplicate full_mod_name found')
 
